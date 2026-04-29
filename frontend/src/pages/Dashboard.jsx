@@ -7,6 +7,7 @@ import {
 } from 'recharts'
 import { Pencil, LogOut, ChevronDown, CheckCircle2, Circle, TrendingUp, Target, LayoutGrid, Users } from 'lucide-react'
 import { getDashboard } from '../api'
+import { isLeader } from '../App'
 
 const LEVEL_COLORS = { 1: '#EF4444', 2: '#F97316', 3: '#EAB308', 4: '#22C55E', 5: '#FACC15' }
 const LEVEL_LABELS = { 0: '—', 1: 'Iniciante', 2: 'Básico', 3: 'Intermediário', 4: 'Avançado', 5: 'Referência' }
@@ -213,13 +214,15 @@ export default function Dashboard() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => navigate('/leader')}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-[#2A2A2A] text-[#A3A3A3] hover:text-white hover:border-[#404040] text-sm font-medium transition-colors"
-          >
-            <Users size={13} />
-            <span className="hidden sm:inline">Visão do Líder</span>
-          </button>
+          {isLeader(user.email) && (
+            <button
+              onClick={() => navigate('/leader')}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-[#2A2A2A] text-[#A3A3A3] hover:text-white hover:border-[#404040] text-sm font-medium transition-colors"
+            >
+              <Users size={13} />
+              <span className="hidden sm:inline">Visão do Líder</span>
+            </button>
+          )}
           <button
             onClick={() => navigate('/wizard')}
             className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FACC15] text-black font-semibold text-sm hover:bg-yellow-400 transition-colors"
