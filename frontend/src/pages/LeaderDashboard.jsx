@@ -316,13 +316,12 @@ function TeamView({ teamData, onSelectDesigner }) {
 // ─── INDIVIDUAL VIEW ─────────────────────────────────────────────────────────
 
 function IndividualView({ users, initialId }) {
-  const [selectedId, setSelectedId] = useState(initialId || null)
+  const [selectedId, setSelectedId] = useState(null)
   const [userData, setUserData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [expandedCat, setExpandedCat] = useState(null)
 
   async function selectUser(id) {
-    if (id === selectedId) return
     setSelectedId(id)
     setUserData(null)
     setExpandedCat(null)
@@ -331,6 +330,11 @@ function IndividualView({ users, initialId }) {
     setUserData(data)
     setLoading(false)
   }
+
+  // Carrega automaticamente se vier de um clique na tabela do time
+  useEffect(() => {
+    if (initialId) selectUser(initialId)
+  }, [])
 
   const radarData = userData?.categories.map(c => ({
     subject: c.name.split(' ')[0],
