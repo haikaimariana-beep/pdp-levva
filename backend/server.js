@@ -4,10 +4,16 @@ const jwt = require('jsonwebtoken');
 const { getDb, initDb } = require('./database');
 
 const app = express();
-const PORT = 3001;
-const JWT_SECRET = 'pdp-levva-secret-2024';
+const PORT = process.env.PORT || 3001;
+const JWT_SECRET = process.env.JWT_SECRET || 'pdp-levva-secret-2024';
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'https://haikaimariana-beep.github.io',
+  ],
+  credentials: true,
+}));
 app.use(express.json());
 
 initDb();
@@ -224,4 +230,4 @@ app.get('/api/leader/team', auth, (req, res) => {
   res.json({ categories: categoryStats, designers, totalPillars });
 });
 
-app.listen(PORT, () => console.log(`PDP API running on http://localhost:${PORT}`));
+app.listen(PORT, '0.0.0.0', () => console.log(`PDP API running on port ${PORT}`));
