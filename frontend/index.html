@@ -2,6 +2,28 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // GitHub Pages SPA fix: receive redirect from 404.html
+      (function(){
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
+        }
+        var search = location.search;
+        if (search) {
+          var p = search.slice(1).split('&').reduce(function(acc, s) {
+            var r = s.split('='); acc[r[0]] = r.slice(1).join('=').replace(/~and~/g, '&'); return acc;
+          }, {});
+          if (p.p !== undefined) {
+            window.history.replaceState(null, null,
+              location.pathname.split('/').slice(0, 2).join('/') + (p.p || '') +
+              (p.q ? '?' + p.q : '') + location.hash
+            );
+          }
+        }
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PDP — Levva Design</title>
