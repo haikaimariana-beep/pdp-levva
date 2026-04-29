@@ -339,6 +339,27 @@ export default function Wizard() {
               <ChevronLeft size={15} /> Anterior
             </button>
 
+            {/* Botão Salvar explícito — sempre visível quando há nota */}
+            {form.score > 0 && (
+              <button
+                onClick={() => doSave()}
+                disabled={saving}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all text-sm font-medium"
+                style={{
+                  borderColor: saved ? '#22C55E60' : '#262626',
+                  color: saved ? '#22C55E' : '#A3A3A3',
+                  background: saved ? '#22C55E10' : 'transparent',
+                }}
+              >
+                {saving ? (
+                  <span className="w-3.5 h-3.5 rounded-full border-2 border-[#525252] border-t-transparent animate-spin" />
+                ) : (
+                  <Check size={14} />
+                )}
+                {saved ? 'Salvo!' : 'Salvar'}
+              </button>
+            )}
+
             {currentIdx < total - 1 ? (
               <button
                 onClick={() => go(1)}
@@ -352,12 +373,21 @@ export default function Wizard() {
                 Próximo <ChevronRight size={15} />
               </button>
             ) : (
-              <button
-                onClick={() => { doSave(); navigate('/dashboard') }}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#FACC15] text-black font-semibold hover:bg-yellow-400 transition-colors text-sm"
-              >
-                Ver Dashboard <LayoutDashboard size={15} />
-              </button>
+              /* Último pilar: Editar + Salvar e Concluir */
+              <>
+                <button
+                  onClick={() => { clearTimeout(saveTimer.current); setDirection(-1); setCurrentIdx(0) }}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#262626] text-[#A3A3A3] hover:text-white hover:border-[#404040] transition-all text-sm font-medium"
+                >
+                  <ChevronLeft size={15} /> Editar
+                </button>
+                <button
+                  onClick={async () => { await doSave(); navigate('/dashboard') }}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#FACC15] text-black font-semibold hover:bg-yellow-400 transition-colors text-sm"
+                >
+                  <Check size={15} /> Salvar e Concluir
+                </button>
+              </>
             )}
           </div>
         </div>
