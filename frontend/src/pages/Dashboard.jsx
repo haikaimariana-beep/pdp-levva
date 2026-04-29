@@ -7,7 +7,7 @@ import {
 } from 'recharts'
 import { Pencil, LogOut, ChevronDown, CheckCircle2, Circle, TrendingUp, Target, LayoutGrid, Users } from 'lucide-react'
 import { getDashboard } from '../api'
-import { isLeader } from '../App'
+import { isLeader } from '../auth'
 
 const LEVEL_COLORS = { 1: '#EF4444', 2: '#F97316', 3: '#EAB308', 4: '#22C55E', 5: '#FACC15' }
 const LEVEL_LABELS = { 0: '—', 1: 'Iniciante', 2: 'Básico', 3: 'Intermediário', 4: 'Avançado', 5: 'Referência' }

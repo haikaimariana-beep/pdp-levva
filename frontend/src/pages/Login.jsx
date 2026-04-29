@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { login } from '../api'
-import { isLeader } from '../App'
+import { isLeader } from '../auth'
 
 export default function Login() {
   const [email, setEmail] = useState('')
