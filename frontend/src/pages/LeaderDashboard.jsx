@@ -48,7 +48,7 @@ function Avatar({ name, size = 'md' }) {
 
 // ─── TEAM VIEW ──────────────────────────────────────────────────────────────
 
-function TeamView({ teamData }) {
+function TeamView({ teamData, onSelectDesigner }) {
   const { categories, designers, totalPillars } = teamData
   const [expandedCat, setExpandedCat] = useState(null)
 
@@ -196,13 +196,17 @@ function TeamView({ teamData }) {
             </thead>
             <tbody>
               {designers.map((d, i) => (
-                <tr key={d.id} className="border-b border-[#161616] hover:bg-[#141414] transition-colors">
+                <tr
+                  key={d.id}
+                  className="border-b border-[#161616] hover:bg-[#141414] transition-colors cursor-pointer"
+                  onClick={() => onSelectDesigner(d.id)}
+                >
                   <td className="px-5 py-3 sticky left-0 bg-[#111111] hover:bg-[#141414]">
                     <div className="flex items-center gap-2.5">
                       <Avatar name={d.name} size="sm" />
                       <div className="min-w-0">
-                        <p className="text-[#D4D4D4] font-medium truncate">{d.name}</p>
-                        <p className="text-[#3A3A3A] text-[10px]">{d.completed}/{d.total} pilares</p>
+                        <p className="text-[#FACC15] font-medium truncate hover:underline">{d.name}</p>
+                        <p className="text-[#3A3A3A] text-[10px]">{d.completed}/{d.total} pilares · clique para ver detalhes</p>
                       </div>
                     </div>
                   </td>
@@ -311,8 +315,8 @@ function TeamView({ teamData }) {
 
 // ─── INDIVIDUAL VIEW ─────────────────────────────────────────────────────────
 
-function IndividualView({ users }) {
-  const [selectedId, setSelectedId] = useState(null)
+function IndividualView({ users, initialId }) {
+  const [selectedId, setSelectedId] = useState(initialId || null)
   const [userData, setUserData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [expandedCat, setExpandedCat] = useState(null)
@@ -565,6 +569,8 @@ export default function LeaderDashboard() {
   const [teamData, setTeamData] = useState(null)
   const [loading, setLoading] = useState(true)
 
+  const [selectedUserId, setSelectedUserId] = useState(null)
+
   useEffect(() => {
     async function load() {
       const [u, t] = await Promise.all([getLeaderUsers(), getLeaderTeam()])
@@ -574,6 +580,11 @@ export default function LeaderDashboard() {
     }
     load()
   }, [])
+
+  function handleSelectDesigner(id) {
+    setSelectedUserId(id)
+    setTab('individual')
+  }
 
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
@@ -636,8 +647,8 @@ export default function LeaderDashboard() {
               transition={{ duration: 0.2 }}
             >
               {tab === 'team'
-                ? <TeamView teamData={teamData} />
-                : <IndividualView users={users.filter(u => u.completed > 0)} />
+                ? <TeamView teamData={teamData} onSelectDesigner={handleSelectDesigner} />
+                : <IndividualView users={users.filter(u => u.completed > 0)} initialId={selectedUserId} />
               }
             </motion.div>
           </AnimatePresence>

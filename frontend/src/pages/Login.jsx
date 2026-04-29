@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { login } from '../api'
+import { isLeader } from '../App'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -19,7 +20,7 @@ export default function Login() {
       const { token, user } = await login(email, name)
       localStorage.setItem('pdp_token', token)
       localStorage.setItem('pdp_user', JSON.stringify(user))
-      navigate('/dashboard')
+      navigate(isLeader(user.email) ? '/leader' : '/dashboard')
     } catch (err) {
       setError(err.message)
     } finally {
